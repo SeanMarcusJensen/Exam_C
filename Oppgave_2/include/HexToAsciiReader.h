@@ -9,6 +9,7 @@
 #define ERROR   -1
 
 #define ENCRYPTED_FILE "./encrypted.md"
+#define DECODED_FILE "./decoded.md"
 
 int hexToIntConverter(char *szLine);
 unsigned char hexToTextConverter(char *szLine);

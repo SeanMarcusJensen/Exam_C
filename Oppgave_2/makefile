@@ -7,11 +7,11 @@ NAME = oppg2
 OBJDIR = obj
 
 #List all .h files here.
-_DEPS = HexToAsciiReader.h
+_DEPS = ReadAndConvert.h TestReadAndConvert.h
 DEPS = $(patsubst %,$(INCLDIR)/%,$(_DEPS))
 
 #List all .c Files here with .o
-_OBJS = main.o HexToAsciiReader.o
+_OBJS = $(NAME).o ReadAndConvert.o TestReadAndConvert.o
 OBJS = $(patsubst %, $(OBJDIR)/%,$(_OBJS))
 
 $(OBJDIR)/%.o: %.c $(DEPS)

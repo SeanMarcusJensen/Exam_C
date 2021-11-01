@@ -9,3 +9,14 @@ unsigned char hexToTextConverter(char *szLine) {
     sprintf(&chCode, "%c", hexToIntConverter(szLine));
     return chCode;
 }
+
+void numberOfOccurances(FILE *pTextFile) {
+    if ( pTextFile != NULL ) {
+        int **occurances;
+        
+        fclose(pTextFile);
+    } else {
+        perror("ERROR in opening file\n");
+        return NULL;
+    }
+}
