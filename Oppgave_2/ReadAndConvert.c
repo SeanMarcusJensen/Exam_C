@@ -4,25 +4,29 @@ int hexToInt(char *szHex) {
     return strtol(szHex, 0, 16);
 }
 
-char* combineTwo(char szFirst, char szSecond) {
+char* combineTwo(char chFirst, char chSecond) {
     char *combined = (char*) malloc(sizeof(char) * 3);
     if ( combined ) {
-       *combined = szFirst;
-       *(combined + 1) = szSecond;
+       *combined = chFirst;
+       *(combined + 1) = chSecond;
        *(combined + 2) = '\0';
     }
     return combined;
 }
 
 // This will take in one array, and char. convert it to Lowercase and then adding count.
-void countOccorances(int *ppiSet, char szCharacter);
+void countOccorances(int *ppiSet, char chCharacter) {
+    // checking if its actually characters we have, NO space, signs or numbers.
+    if ( validateChar(chCharacter) == OK ) {
+        chCharacter = toupper(chCharacter); // converting it to uppercase
+        ppiSet[chCharacter % 65]++;
+    }
+}
 
-int validateChar(char szChar) {  // a-zA-Z0-9'
-    if ( szChar >= 48 && szChar <= 57 ) // Checking for numbers.
+int validateChar(char chChar) {  // a-zA-Z0-9
+    if ( chChar >= 65 && chChar <= 90 ) // Checking for uppercase letters.
         return OK;
-    else if ( szChar >= 65 && szChar <= 90 ) // Checking for uppercase letters.
-        return OK;
-    else if ( szChar >= 97 && szChar <= 122) // Checking for lowecase letters.
+    else if ( chChar >= 97 && chChar <= 122) // Checking for lowecase letters.
         return OK;
 
     return ERROR;

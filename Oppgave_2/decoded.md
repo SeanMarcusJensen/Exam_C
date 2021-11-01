@@ -1,0 +1,1 @@
+Dette er en fil dere skal teste med, den inneholder tekst som er hex enkodet. Denne oppgaven illustrerer enkel lesing av filer og at dere kan ta en enkel konvertering av data, samt enkel loop kode. Dette klarer du nok fint.

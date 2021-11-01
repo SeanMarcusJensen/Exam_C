@@ -9,12 +9,8 @@ void validateDataTest() {
     int validate = 0;
 
     for ( int i = 0; i < 256; i++ ) {
-        if ( i < 48 && validateChar(i) != -1 ) {
+        if ( i < 57 && validateChar(i) != -1 ) {
             printf("Error on less than 48\n");
-            validate = 1;
-        } 
-        if ( i >= 48 && i <= 57 && validateChar(i) == -1 ) {
-            printf("Error on numbers\n");
             validate = 1;
         } 
         if ( i > 57 && i < 65 && validateChar(i) != -1 ) {
