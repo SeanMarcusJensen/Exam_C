@@ -15,11 +15,11 @@ char* combineTwo(char chFirst, char chSecond) {
 }
 
 // This will take in one array, and char. convert it to Lowercase and then adding count.
-void countOccorances(int *ppiSet, char chCharacter) {
+void countOccorances(int *piSet, char chCharacter) {
     // checking if its actually characters we have, NO space, signs or numbers.
     if ( validateChar(chCharacter) == OK ) {
         chCharacter = toupper(chCharacter); // converting it to uppercase
-        ppiSet[chCharacter % 65]++;
+        piSet[chCharacter % 65]++;  // Taking % 65 to make uppercase into 0 - 25.
     }
 }
 
