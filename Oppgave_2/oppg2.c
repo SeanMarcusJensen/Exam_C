@@ -36,9 +36,10 @@ int main(void) {
                     chPrev = chCurrent;
                 }   // End else count % 2 == 0
             }   // End while getc(pInput);
-            for ( int i = 0; i < 25; i++ ) {
+            for ( int i = 0; i <= 25; i++ ) {
                 printf("%c: %i\n", i + 65, piOcc[i]);
             }
+            free(piOcc);
             fclose(pOutputFile);
         } else { // End if pOutput
             perror("Error in opening Outputfile");
@@ -50,6 +51,6 @@ int main(void) {
         perror("Error in opening InputFile");
         return ERROR;
     }   // End else pInput
-
+    
     return OK;
 }
