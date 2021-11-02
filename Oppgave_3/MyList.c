@@ -1,7 +1,20 @@
 #include "MyList.h"
 
 // Makes a Product, all linkes are null. Need to be set by insert.
-struct Product* createProduct(char *szName, float fPrice, int iQuantity);
+struct Product* createProduct(char *szName, float fPrice, int iQuantity) {
+    Product *newProduct = (Product *) malloc(sizeof(Product));
+    if ( newProduct ) {
+        newProduct->fPrice = fPrice;
+        newProduct->iQuantity = iQuantity;
+        newProduct->szName = szName;
+        newProduct->pstNext = NULL;
+        newProduct->pstPrev = NULL;
+        return newProduct;
+    } else {
+        perror("Failed to make new Product!\n");
+        return NULL;
+    }
+}
 
 // Insert at end of list.
 int insert(struct Product **pstHead, struct Product *pstProduct);
@@ -9,7 +22,7 @@ int insert(struct Product **pstHead, struct Product *pstProduct);
 // Deletes the tail of list.
 int deleteLast(struct Product **pstHead);
 
-// Deletes All Products with name...?
+// Deletes All Products with name...? NEED TO FREE.
 int deleteAllByName(struct Product **pstHead, char *szName);
 
 // Returns the sum of total price for products in list.
@@ -17,21 +30,6 @@ float getPriceOfAllProduct(struct Product **pstHead);
 
 // Simply prints out the Receipt. # Product info.
 void receipt(struct Product *pstProduct) {
-    printf("%s {\n", pstProduct->szName);
-    printf("\tPrice: kr %.2f,-\n", pstProduct->fPrice);
-    printf("\tQuantity: %03i stk\n", pstProduct->iQuantity);
-    if ( pstProduct->pstNext ) {
-        printf("\tNext: %s\n", pstProduct->pstNext->szName);
-    } else {
-        printf("\tNext: NULL\n");
-    }
-    if ( pstProduct->pstPrev ) {
-        printf("\tPrev: %s\n", pstProduct->pstPrev->szName);
-    } else {
-        printf("\tPrev: NULL\n");
-    }
-    printf("}\n\n");
-
     printf("-----------------------------------------\n");
     printf("Name:\t\t%s\n", pstProduct->szName);
     printf("Price:\t\tkr %.2f,-\n", pstProduct->fPrice);
@@ -50,18 +48,8 @@ void receipt(struct Product *pstProduct) {
 }
 
 int test() {
-    Product *head = (Product*) malloc(sizeof(Product));
-    if ( head ) {
-        head->szName = "Melkerull";
-        head->fPrice = 21.99;
-        head->iQuantity = 22;
-        head->pstNext = NULL;
-        head->pstPrev = NULL;        
-
-        receipt(head);
-        free(head);
-        return OK;
-    }
-
+    Product *head = createProduct("Melkerull", 21.99, 22);
+    receipt(head);
+    
     return ERROR;
 }
