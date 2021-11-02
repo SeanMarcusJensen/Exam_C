@@ -18,24 +18,16 @@ struct Product* createProduct(char *szName, float fPrice, int iQuantity) {
 
 // Insert at end of list.
 int insert(struct Product **pstHead, struct Product *pstProduct) {
-    printf("AT INSERT1\n");
     if ( (*pstHead) == NULL ) {
-        printf("IS NULL HEAD\n");
         (*pstHead) = pstProduct;
         return OK;
     } else {
-        printf("NOT NULL\n");
         Product *temp = (*pstHead);
-        printf("Going to the last element\n");
         while( temp->pstNext != NULL ) {
-            printf("Inside Loop\n");
             temp = temp->pstNext;
-            printf("Set to next in loop\n");
         }
-        printf("After Loop\n");
         temp->pstNext = pstProduct;
-        printf("Added next!\n");
-
+        pstProduct->pstPrev = temp;
         return OK;
     }
     return ERROR;
@@ -45,7 +37,7 @@ int insert(struct Product **pstHead, struct Product *pstProduct) {
 int deleteLast(struct Product **pstHead) {
     if ( pstHead ){
         Product *temp = (*pstHead);
-        while ( temp = temp->pstNext );
+        while ( (temp = temp->pstNext) != NULL );
         temp->pstPrev->pstNext = NULL;
         free(temp);
         return OK;
@@ -66,15 +58,15 @@ void receipt(struct Product *pstProduct) {
     printf("Name:\t\t%s\n", pstProduct->szName);
     printf("Price:\t\tkr %.2f,-\n", pstProduct->fPrice);
     printf("Quantity:\t%03i stk\n", pstProduct->iQuantity);
-    if ( pstProduct->pstNext ) {
-        printf("Next:\t\t%s\n", pstProduct->pstNext->szName);
-    } else {
-        printf("Next:\t\tNULL\n");
-    }
     if ( pstProduct->pstPrev ) {
         printf("Prev:\t\t%s\n", pstProduct->pstPrev->szName);
     } else {
         printf("Prev:\t\tNULL\n");
+    }
+    if ( pstProduct->pstNext ) {
+        printf("Next:\t\t%s\n", pstProduct->pstNext->szName);
+    } else {
+        printf("Next:\t\tNULL\n");
     }
     printf("-----------------------------------------\n");
 }
@@ -92,6 +84,10 @@ int test() {
     insert(&head, createProduct("Tannbørste", 37.59, 55));
     insert(&head, createProduct("Tannkrem", 22.9, 2));
     insert(&head, createProduct("Apelort", 22.9, 2));
+
+    printAll(&head);
+
+    deleteLast(&head);
 
     printAll(&head);
 
