@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define OK      0
 #define ERROR   -1
@@ -43,7 +44,30 @@ float getPriceOfAllProduct(struct Product **pstHead);
 // Simply prints out the Receipt. # Product info.
 void receipt(struct Product *pstProduct);
 
-
 // test
 int test();
+/*
+
+Product *pstHead;
+
+// Makes a Product, all linkes are null. Need to be set by insert.
+struct Product* createProduct();
+
+// Insert at end of list.
+int insert();
+
+// Deletes the tail of list.
+int deleteLast();
+
+// Deletes All Products with name...?
+int deleteAllByName(char *szName);
+
+// Returns the sum of total price for products in list.
+float getPriceOfAllProduct();
+
+// Simply prints out the Receipt. # Product info.
+void receipt();
+
+
+*/
 #endif
