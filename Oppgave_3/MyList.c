@@ -38,7 +38,7 @@ int deleteLast(struct Product **pstHead) {
     if ( pstHead ){
         Product *temp = (*pstHead);
         while ( (temp = temp->pstNext) != NULL );
-        temp->pstPrev->pstNext = NULL;
+        temp = NULL;
         free(temp);
         return OK;
     } else {
@@ -51,7 +51,6 @@ int deleteAllByName(struct Product **pstHead, char *szName);
 
 // Returns the sum of total price for products in list.
 float getPriceOfAllProduct(struct Product **pstHead);
-
 // Simply prints out the Receipt. # Product info.
 void receipt(struct Product *pstProduct) {
     printf("-----------------------------------------\n");
