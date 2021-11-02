@@ -58,6 +58,7 @@ void receipt(struct Product *pstProduct) {
     printf("Name:\t\t%s\n", pstProduct->szName);
     printf("Price:\t\tkr %.2f,-\n", pstProduct->fPrice);
     printf("Quantity:\t%03i stk\n", pstProduct->iQuantity);
+    
     if ( pstProduct->pstPrev ) {
         printf("Prev:\t\t%s\n", pstProduct->pstPrev->szName);
     } else {
