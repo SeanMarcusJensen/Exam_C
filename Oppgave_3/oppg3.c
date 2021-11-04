@@ -36,7 +36,6 @@ int main(void) {
                     scanf("%i", &temp->iQuantity);
                     temp->szName = szNameOfProduct;
                     insert(&pstHead, temp);
-                    
                     break;
                 case 2:
                     deleteLast(&pstHead);
@@ -47,7 +46,6 @@ int main(void) {
                     scanf("%s", szNameOfProduct);
                     deleteAllByName(&pstHead, szNameOfProduct);
                     printf("*****************************************\n");
-                    free(szNameOfProduct);
                     break;
                 case 4:
                     printf("Pris av alle varene: %f", getPriceOfAllProduct(&pstHead));
@@ -61,6 +59,8 @@ int main(void) {
                 }
                 printf("\n\n\n");
             }
+            free(szNameOfProduct);
+            free(temp);
         } else {
             perror("Failed Malloc");
             return ERROR;
@@ -68,12 +68,13 @@ int main(void) {
     }
 
     // FREE ALL
-
-    while( pstHead != NULL) {
-        pstHead = pstHead->pstNext;
-        free(pstHead->pstPrev);
+    Product *temp;
+    while(pstHead != NULL ) {
+        temp = pstHead->pstNext;
+        free(pstHead);
+        pstHead = temp;
     }
-    free(pstHead);
+    free(temp);
     
     return OK;
 }
