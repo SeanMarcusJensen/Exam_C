@@ -1,8 +1,5 @@
 #include "MyList.h"
 
-
-
-
 // Simply prints out the Receipt. # Product info.
 void receipt(Product *pstProduct) {
     printf("-----------------------------------------\n");
@@ -129,7 +126,6 @@ int deleteAllByName(Product **pstHead, char *szName) {
             } else {
                 current = current->pstNext;
             }
-
         }
         return OK;
     } else {
@@ -149,29 +145,4 @@ float getPriceOfAllProduct(Product **pstHead) {
         }
     }
     return sum;
-}
-
-
-int test() {
-    Product *head = NULL;
-    insert(&head, createProduct("Tannborste", 1, 1));
-    insert(&head, createProduct("Tannkrem", 1, 1));
-    insert(&head, createProduct("Apelort", 1, 1));
-    insert(&head, createProduct("Tannkrem", 1, 1));
-    insert(&head, createProduct("Tanntråd", 1, 1));
-
-    printf("FULL LIST!\n");
-    printAll(&head);
-    
-    printf("Price of all is: kr %08.2f-,\n", getPriceOfAllProduct(&head));
-
-    
-    deleteAllByName(&head, "Tannkrem");
-    deleteAllByName(&head, "Apelort");
-    deleteAllByName(&head, "Tanntråd");
-    deleteAllByName(&head, "Tannborste");
-
-    printAll(&head);
-
-    return ERROR;
 }
