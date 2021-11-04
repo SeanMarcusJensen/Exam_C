@@ -13,9 +13,7 @@
 #define OUTPUT_FILE "./decoded.md"
 
 char* combineTwo(char chFirst, char chSecond);
-int hexToInt(char *szHex);
-// This will take in one array, and char. convert it to Lowercase and then adding count.
 void countOccorances(int *piSet, char szCharacter);
-int validateChar(char chChar);  // a-zA-Z0-9
+int validateChar(char chChar);  // a-zA-Z
 
 #endif

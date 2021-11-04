@@ -6,25 +6,24 @@ int main(void) {
         FILE *pOutputFile = fopen(OUTPUT_FILE, "w");
         if ( pOutputFile ) {
             // Declare Variables.
-            char chCurrent, chPrev, chCharacter;
-            char* szPair;
+            char chCurrent, chPrev;
+            char *szPair;
             int count = 0;
             int *piOcc = (int*) malloc(sizeof(int) * 25); // Count of alfabeth.
             if ( piOcc) {
                 // While File has chars.
                 while((chCurrent = fgetc(pInputFile)) != EOF ) {
                     // I want to skip all if the char is \n, else it will bring problems.
-                    if ( chCurrent == '\n') {
-                        continue;
-                    }
+                    if ( chCurrent == '\n') continue;
+                    
                     // adding Count to see when we have 2 chars to combine.
                     count++;
                     if ( count % 2 == 0 ) { // We GOT 2 chars.
                         // Sending in both chars to combine function. and then write it to file.
                         szPair = combineTwo(chPrev, chCurrent);
-                        chCharacter = hexToInt(szPair);
-                        countOccorances(piOcc ,chCharacter);
-                        fprintf(pOutputFile, "%c", chCharacter);
+                        // strtol makes it into a int from base 16.
+                        countOccorances(piOcc , (int) strtol(szPair, 0, 16));
+                        fprintf(pOutputFile, "%c", (int) strtol(szPair, 0, 16));
                     } else {    // End if count % 2 == 0.
                         chPrev = chCurrent;
                     }   // End else count % 2 == 0
@@ -32,9 +31,7 @@ int main(void) {
 
                 // Printing out the output of all chars in the file.
                 printf("Character Count found in file:\n");
-                for ( int i = 0; i <= 25; i++ ) {
-                    printf("%c: %i\n", i + 65, piOcc[i]);
-                }   // End for Printing out.
+                for ( int i = 0; i <= 25; i++) printf("%c, %i\n", i + 65, piOcc[i]);
                 free(piOcc);
             } else {  // End if piOcc malloc
                 perror("Error in malloc piOcc");
