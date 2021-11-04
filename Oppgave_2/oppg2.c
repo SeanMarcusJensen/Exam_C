@@ -1,4 +1,4 @@
-#include "ReadAndConvert.h"
+#include "CharProcess.h"
 
 int main(void) {
     FILE *pInputFile = fopen(INPUT_FILE, "r");
@@ -11,7 +11,7 @@ int main(void) {
             int count = 0;
             int *piOcc = (int*) malloc(sizeof(int) * 25); // Count of alfabeth.
             if ( piOcc) {
-                // While File has chars.
+                // While filePointer is not at EOF.
                 while((chCurrent = fgetc(pInputFile)) != EOF ) {
                     // I want to skip all if the char is \n, else it will bring problems.
                     if ( chCurrent == '\n') continue;
@@ -21,9 +21,10 @@ int main(void) {
                     if ( count % 2 == 0 ) { // We GOT 2 chars.
                         // Sending in both chars to combine function. and then write it to file.
                         szPair = combineTwo(chPrev, chCurrent);
-                        // strtol makes it into a int from base 16.
-                        countOccorances(piOcc , (int) strtol(szPair, 0, 16));
+                        
+                        countOccorances(piOcc , (int) strtol(szPair, 0, 16)); // Sending 
                         fprintf(pOutputFile, "%c", (int) strtol(szPair, 0, 16));
+                        free(szPair);
                     } else {    // End if count % 2 == 0.
                         chPrev = chCurrent;
                     }   // End else count % 2 == 0

@@ -1,5 +1,5 @@
-#ifndef READ_AND_CONVERT_H
-#define READ_AND_CONVERT_H
+#ifndef CHAR_PROCESS_H
+#define CHAR_PROCESS_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,11 +9,10 @@
 #define OK      0
 #define ERROR   -1
 
-#define INPUT_FILE "./encrypted.md"
+#define INPUT_FILE "./encoded.md"
 #define OUTPUT_FILE "./decoded.md"
 
 char* combineTwo(char chFirst, char chSecond);
 void countOccorances(int *piSet, char szCharacter);
-int validateChar(char chChar);  // a-zA-Z
 
 #endif

@@ -1,4 +1,8 @@
-#include "ReadAndConvert.h"
+#include "CharProcess.h"
+
+static int validateChar(char chChar) {  // a-zA-Z0-9
+    return ( chChar >= 65 && chChar <= 90 || chChar >= 97 && chChar <= 122) ? OK : ERROR;
+}
 
 char* combineTwo(char chFirst, char chSecond) {
     char *combined = (char*) malloc(sizeof(char) * 3);
@@ -16,6 +20,3 @@ void countOccorances(int *piSet, char chCharacter) {
     (validateChar(chCharacter) == OK) ? piSet[toupper(chCharacter) % 65]++ : 0;
 }
 
-int validateChar(char chChar) {  // a-zA-Z0-9
-    return ( chChar >= 65 && chChar <= 90 || chChar >= 97 && chChar <= 122) ? OK : ERROR;
-}
