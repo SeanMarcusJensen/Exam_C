@@ -52,5 +52,13 @@ int main(void) {
         }
     }
 
+    /* FREE ALL
+
+    while( head->pstNext != NULL) {
+        head = head->pstNext;
+        free(head->pstPrev);
+    }
+    free(head);
+    */
     return OK;
 }

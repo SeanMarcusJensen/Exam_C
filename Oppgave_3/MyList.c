@@ -37,11 +37,17 @@ int insert(struct Product **pstHead, struct Product *pstProduct) {
 int deleteLast(struct Product **pstHead) {
     if ( pstHead ){
         Product *temp = (*pstHead);
-        while ( (temp = temp->pstNext) != NULL );
-        temp = NULL;
+
+        while ( temp->pstNext != NULL ) {
+            temp = temp->pstNext;
+        }
+
+        temp->pstPrev->pstNext = NULL;
         free(temp);
+
         return OK;
     } else {
+        perror("ERROR: NO HEAD TO FOLLOW.");
         return ERROR;
     }
 }
@@ -85,11 +91,33 @@ int test() {
     insert(&head, createProduct("Tannkrem", 22.9, 2));
     insert(&head, createProduct("Apelort", 22.9, 2));
 
+    printf("FULL LIST!\n");
     printAll(&head);
 
+    printf("\n\nDELETING\n");
     deleteLast(&head);
-
     printAll(&head);
+
+    printf("\n\nDELETING\n");
+    deleteLast(&head);
+    printAll(&head);
+    
+    printf("\n\nDELETING\n");
+    deleteLast(&head);
+    printAll(&head);
+
+    printf("\n\nDELETING\n");
+    deleteLast(&head);
+    printAll(&head);
+
+
+
+    // FREE ALL
+    while( head->pstNext != NULL) {
+        head = head->pstNext;
+        free(head->pstPrev);
+    }
+    free(head);
 
     return ERROR;
 }
