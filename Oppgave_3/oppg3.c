@@ -43,7 +43,6 @@ int main(void) {
             case 5:
                 //receipt();
                 break;
-
             default:
                 printf("Exiting!\n");
                 break;

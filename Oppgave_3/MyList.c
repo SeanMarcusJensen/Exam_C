@@ -1,64 +1,10 @@
 #include "MyList.h"
 
-// Makes a Product, all linkes are null. Need to be set by insert.
-struct Product* createProduct(char *szName, float fPrice, int iQuantity) {
-    Product *newProduct = (Product *) malloc(sizeof(Product));
-    if ( newProduct ) {
-        newProduct->fPrice = fPrice;
-        newProduct->iQuantity = iQuantity;
-        newProduct->szName = szName;
-        newProduct->pstNext = NULL;
-        newProduct->pstPrev = NULL;
-        return newProduct;
-    } else {
-        perror("Failed to make new Product!\n");
-        return NULL;
-    }
-}
 
-// Insert at end of list.
-int insert(struct Product **pstHead, struct Product *pstProduct) {
-    if ( (*pstHead) == NULL ) {
-        (*pstHead) = pstProduct;
-        return OK;
-    } else {
-        Product *temp = (*pstHead);
-        while( temp->pstNext != NULL ) {
-            temp = temp->pstNext;
-        }
-        temp->pstNext = pstProduct;
-        pstProduct->pstPrev = temp;
-        return OK;
-    }
-    return ERROR;
-}
 
-// Deletes the tail of list.
-int deleteLast(struct Product **pstHead) {
-    if ( pstHead ){
-        Product *temp = (*pstHead);
 
-        while ( temp->pstNext != NULL ) {
-            temp = temp->pstNext;
-        }
-
-        temp->pstPrev->pstNext = NULL;
-        free(temp);
-
-        return OK;
-    } else {
-        perror("ERROR: NO HEAD TO FOLLOW.");
-        return ERROR;
-    }
-}
-
-// Deletes All Products with name...? NEED TO FREE.
-int deleteAllByName(struct Product **pstHead, char *szName);
-
-// Returns the sum of total price for products in list.
-float getPriceOfAllProduct(struct Product **pstHead);
 // Simply prints out the Receipt. # Product info.
-void receipt(struct Product *pstProduct) {
+void receipt(Product *pstProduct) {
     printf("-----------------------------------------\n");
     printf("Name:\t\t%s\n", pstProduct->szName);
     printf("Price:\t\tkr %.2f,-\n", pstProduct->fPrice);
@@ -78,128 +24,154 @@ void receipt(struct Product *pstProduct) {
 }
 
 void printAll(Product **pstHead) {
-    Product *temp = *pstHead;
-    receipt(temp);
-    while( (temp = temp->pstNext) != NULL ) {
+    if ( *pstHead ) {
+        Product *temp = *pstHead;
         receipt(temp);
+        while( (temp = temp->pstNext) != NULL ) {
+            receipt(temp);
+        }
+    } else {
+        perror("No Head.\n");
     }
 }
-
-int test() {
-    Product *head = NULL;
-    insert(&head, createProduct("Tannbørste", 37.59, 55));
-    insert(&head, createProduct("Tannkrem", 22.9, 2));
-    insert(&head, createProduct("Apelort", 22.9, 2));
-
-    printf("FULL LIST!\n");
-    printAll(&head);
-
-    printf("\n\nDELETING\n");
-    deleteLast(&head);
-    printAll(&head);
-
-    printf("\n\nDELETING\n");
-    deleteLast(&head);
-    printAll(&head);
-    
-    printf("\n\nDELETING\n");
-    deleteLast(&head);
-    printAll(&head);
-
-    printf("\n\nDELETING\n");
-    deleteLast(&head);
-    printAll(&head);
-
-
-
-    // FREE ALL
-    while( head->pstNext != NULL) {
-        head = head->pstNext;
-        free(head->pstPrev);
-    }
-    free(head);
-
-    return ERROR;
-}
-/*
-
 
 // Makes a Product, all linkes are null. Need to be set by insert.
-struct Product* createProduct() {
-    Product *newProduct = (Product*) malloc(sizeof(Product));
+struct Product* createProduct(char *szName, float fPrice, int iQuantity) {
+    Product *newProduct = (Product *) malloc(sizeof(Product));
     if ( newProduct ) {
-        char szProductName[50];
-        float fPrice;
-        int iQuantity;
-
-        printf("Navn på produkt: ");
-        scanf("%s", szProductName);
-        printf("Pris på varen: ");
-        scanf("%f", &fPrice);
-        printf("Hvor mange har du: ");
-        scanf("%d", &iQuantity);
-
-        newProduct->szName = szProductName;
         newProduct->fPrice = fPrice;
         newProduct->iQuantity = iQuantity;
+        newProduct->szName = szName;
         newProduct->pstNext = NULL;
         newProduct->pstPrev = NULL;
-
+        return newProduct;
     } else {
-        printf("Ute av drift!\n");
+        perror("Failed to make new Product!\n");
         return NULL;
     }
 }
 
 // Insert at end of list.
-int insert(){
-    Product *newOne = createProduct();
-    pstHead = newOne;
-    /*
-    if ( !pstHead ) {
-        pstHead = newOne;
+int insert(Product **pstHead, Product *pstProduct) {
+    if ( (*pstHead) == NULL ) {
+        (*pstHead) = pstProduct;
+        return OK;
     } else {
-        Product *temp = pstHead;
-        while( !temp->pstNext ) {
+        Product *temp = (*pstHead);
+        while( temp->pstNext != NULL ) {
             temp = temp->pstNext;
         }
-        temp->pstNext = newOne;
-        newOne->pstPrev = temp;
+        temp->pstNext = pstProduct;
+        pstProduct->pstPrev = temp;
+        return OK;
     }
-    return OK;
+    return ERROR;
 }
+
 
 // Deletes the tail of list.
-int deleteLast() {
-    return OK;
+int deleteLast(Product **pstHead) {
+    
+    if ( pstHead ) {
+        Product *temp = (*pstHead);
+
+        while ( temp->pstNext != NULL ) {
+            temp = temp->pstNext;
+        }
+        
+        if ( temp->pstPrev ) {
+            temp->pstPrev->pstNext = NULL;
+        }
+
+        free(temp);
+
+        return OK;
+    } else {
+        perror("ERROR: NO HEAD TO FOLLOW.");
+        return ERROR;
+    }
 }
 
-// Deletes All Products with name...?
-int deleteAllByName(char *szName) {
-    return OK;
+// Deletes All Products with name...? NEED TO FREE.
+int deleteAllByName(Product **pstHead, char *szName) {
+    if ( (*pstHead )) {
+        
+        Product *current = *pstHead;
+        Product *next;
+
+        // Looping thu aslong as current is not null.
+        while (current) {
+            // we want do check if the name is the same as we want to delete.
+            if ( strcmp(current->szName, szName) == 0 ) {
+                // Setting next to be the next link.
+                // We want this because we will move links around.
+                next = current->pstNext;
+                
+                // if the current is the same as head, we want to make head next link.
+                if ( current == (*pstHead ) )
+                    (*pstHead) = current->pstNext;
+
+                // if the next link is available, we set the nextlinks prev to be the
+                // Link before us.
+                if ( current->pstNext != NULL )
+                    current->pstNext->pstPrev = current->pstPrev;
+
+                // if we have a link to prev. we can set the next prev link to
+                // point to the next.
+                if ( current->pstPrev != NULL ) 
+                    current->pstPrev->pstNext = current->pstNext;
+
+                free(current);
+
+                current = next;
+            
+            // if its not the same. we move on to the next link.
+            } else {
+                current = current->pstNext;
+            }
+
+        }
+        return OK;
+    } else {
+        perror("Listy Entry you gave is not valid\n");
+        return ERROR;
+    }
 }
 
 // Returns the sum of total price for products in list.
-float getPriceOfAllProduct() {
-    return 0.1f;
+float getPriceOfAllProduct(Product **pstHead) {
+    float sum = 0;
+    if ( pstHead ) {
+        Product *temp = *pstHead;
+        while(temp != NULL ) {
+            sum += temp->fPrice * temp->iQuantity;
+            temp = temp->pstNext;
+        }
+    }
+    return sum;
 }
 
-// Simply prints out the Receipt. # Product info.
-void receipt() {
-        printf("-----------------------------------------\n");
-        printf("Name:\t\t%s\n", pstHead->szName);
-        printf("Price:\t\tkr %.2f,-\n", pstHead->fPrice);
-        printf("Quantity:\t%03i stk\n", pstHead->iQuantity);
-        if ( pstHead->pstNext ) {
-            printf("Next:\t\t%s\n", pstHead->pstNext->szName);
-        } else {
-            printf("Next:\t\tNULL\n");
-        }
-        if ( pstHead->pstPrev ) {
-            printf("Prev:\t\t%s\n", pstHead->pstPrev->szName);
-        } else {
-            printf("Prev:\t\tNULL\n");
-        }
-        printf("-----------------------------------------\n");
+
+int test() {
+    Product *head = NULL;
+    insert(&head, createProduct("Tannborste", 1, 1));
+    insert(&head, createProduct("Tannkrem", 1, 1));
+    insert(&head, createProduct("Apelort", 1, 1));
+    insert(&head, createProduct("Tannkrem", 1, 1));
+    insert(&head, createProduct("Tanntråd", 1, 1));
+
+    printf("FULL LIST!\n");
+    printAll(&head);
+    
+    printf("Price of all is: kr %08.2f-,\n", getPriceOfAllProduct(&head));
+
+    
+    deleteAllByName(&head, "Tannkrem");
+    deleteAllByName(&head, "Apelort");
+    deleteAllByName(&head, "Tanntråd");
+    deleteAllByName(&head, "Tannborste");
+
+    printAll(&head);
+
+    return ERROR;
 }
-*/
