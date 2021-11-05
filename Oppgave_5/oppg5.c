@@ -27,8 +27,10 @@ void *writeToFile(void *szMessage) {
                     char* final =
                         getSubString((char*) szMessage, 0 + i,
                         strlen((char*) szMessage) - (i - 10));
+
                     fprintf(pOutput, "%s", final);
                     free(final);
+                    pthread_mutex_unlock(&mutex);
                     break;
                 }
 
@@ -50,7 +52,6 @@ void *writeToFile(void *szMessage) {
 
 
 int main(void) {
-
     pthread_t stThread;
 
     char msg[100];
@@ -71,11 +72,8 @@ int main(void) {
             scanf("%[^\n]", msg);
             pthread_create(&stThread, NULL, writeToFile, msg);
             break;
-        case 2: 
-            printf("You pressed me\n");
-            break;
         case 3:
-            printf("Nice to play with you\n");
+            printf("Nice to play with you.\n");
             exit(EXIT_SUCCESS);
         default:
             break;
