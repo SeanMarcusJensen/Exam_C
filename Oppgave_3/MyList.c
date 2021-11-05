@@ -2,7 +2,6 @@
 
 // Simply prints out the Receipt. # Product info.
 void receipt(Product *pstProduct) {
-    printf("-----------------------------------------\n");
     printf("Name:\t\t%s\n", pstProduct->szName);
     printf("Price:\t\tkr %.2f,-\n", pstProduct->fPrice);
     printf("Quantity:\t%03i stk\n", pstProduct->iQuantity);
@@ -35,10 +34,14 @@ void printAll(Product **pstHead) {
 // Makes a Product, all linkes are null. Need to be set by insert.
 struct Product* createProduct(char *szName, float fPrice, int iQuantity) {
     Product *newProduct = (Product *) malloc(sizeof(Product));
+    
     if ( newProduct ) {
+        char *new = (char*) malloc(sizeof(char)*50);
+        if (!new) return NULL;
+        strcpy(new, szName);
         newProduct->fPrice = fPrice;
         newProduct->iQuantity = iQuantity;
-        newProduct->szName = szName;
+        newProduct->szName = new;
         newProduct->pstNext = NULL;
         newProduct->pstPrev = NULL;
         return newProduct;
@@ -79,7 +82,7 @@ int deleteLast(Product **pstHead) {
         if ( temp->pstPrev ) {
             temp->pstPrev->pstNext = NULL;
         }
-
+        free(temp->szName);
         free(temp);
 
         return OK;
@@ -90,7 +93,7 @@ int deleteLast(Product **pstHead) {
 }
 
 // Deletes All Products with name...? NEED TO FREE.
-int deleteAllByName(Product **pstHead, char *szName) {
+int deleteAllByName(Product **pstHead, const char *szName) {
     if ( (*pstHead )) {
         
         Product *current = *pstHead;
@@ -118,6 +121,7 @@ int deleteAllByName(Product **pstHead, char *szName) {
                 if ( current->pstPrev != NULL ) 
                     current->pstPrev->pstNext = current->pstNext;
 
+                free(current->szName);
                 free(current);
 
                 current = next;

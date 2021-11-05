@@ -18,7 +18,7 @@ $(OBJDIR)/%.o: %.c $(DEPS)
 
 #Change oppg1 to whatever name desired.
 $(NAME):$(OBJS)
-	gcc -o $@ $^ $(CFLAGS) 
+	gcc -o $@ $^ $(CFLAGS)
 
 #Here change execute to oppgname.
 exe:

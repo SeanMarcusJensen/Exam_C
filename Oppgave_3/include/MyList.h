@@ -26,7 +26,7 @@ int insert(struct Product **pstHead, struct Product *pstProduct);
 int deleteLast(struct Product **pstHead);
 
 // Deletes All Products with name...?
-int deleteAllByName(struct Product **pstHead, char *szName);
+int deleteAllByName(struct Product **pstHead, const char *szName);
 
 // Returns the sum of total price for products in list.
 float getPriceOfAllProduct(struct Product **pstHead);
