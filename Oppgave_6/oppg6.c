@@ -21,8 +21,6 @@ int main(void){
         perror("ERROR in opening socket..\n");
     }
 
-    // making the connection..
-    bzero(&saAddr, sizeof(saAddr));
     saAddr.sin_family = AF_INET;
     saAddr.sin_port = htons(iPORT);
     if ( inet_pton(AF_INET, "77.111.240.75", &saAddr.sin_addr) <= 0 ) {
@@ -34,7 +32,6 @@ int main(void){
         exit(1);
     }
 
-    // WE ARE CONNECTED.
     int iWrite;
     sprintf(request, "GET /pg3401/test.html HTTP/1.1\r\nHost: www.eastwillsecurity.com\r\nAccept: text/html\r\n\r\n");
     printf("%s", request);
