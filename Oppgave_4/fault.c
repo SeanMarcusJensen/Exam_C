@@ -1,4 +1,14 @@
-#include "httpReq.h"
+#include <stdbool.h>
+#include <stdlib.h>
+
+
+typedef struct _MYHTTP {
+    int iHttpCode;
+    int iContentLength; 
+    bool bIsSuccess;
+    char szServer[16];  // Mistake nr 1?
+    char szContentType[16];
+} MYHTTP;
 
 MYHTTP* ProcessHttpHeader(char *pszHttp) {
     char* pszPtr;
@@ -8,7 +18,7 @@ MYHTTP* ProcessHttpHeader(char *pszHttp) {
     
     pHttp->iHttpCode = atoi(pszHttp + strlen("HTTP/1.x "));
     
-    if (pHttp->iHttpCode == 200) { // Mistake nr 2? == not =.
+    if (pHttp->iHttpCode = 200) { // Mistake nr 2? == not =.
         pHttp->bIsSuccess = true;
     }
 
@@ -34,15 +44,7 @@ MYHTTP* ProcessHttpHeader(char *pszHttp) {
     if (pszPtr) {
         pszPtr += 14; 
         while (!isdigit(pszPtr[0])) pszPtr++;
-        pHttp->iContentLength = atoi(pszPtr); // Mistake nr 3? - atoi pszPtr.
+        pHttp->iContentLength = atoi(pszHttp); // Mistake nr 3? - atoi pszPtr.
     }
-
-    pszPtr = strstr(pszHttp, "Last-Modified");
-    if ( pszPtr ) {
-        pszPtr += 13;
-        while(!isalpha(pszPtr[0])) pszPtr++;
-        strncpy(pHttp->szLastModified, pszPtr, 31);
-    }
-
     return pHttp;
 }

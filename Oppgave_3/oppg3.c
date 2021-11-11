@@ -23,7 +23,6 @@ int main(void) {
             switch (choice)
             {
             case 1:
-
                 printf("Vi trenger å lage produktet ditt. hjelp oss\n");
 
                 printf("Navn: ");
@@ -38,7 +37,11 @@ int main(void) {
                 insert(&pstHead, createProduct(szNameOfProduct, fPrice, iQuantity));
                 break;
             case 2:
-                deleteLast(&pstHead);
+                if ( pstHead ) {
+                    deleteLast(&pstHead);
+                } else {
+                    printf("The List is empty.. Nothing to delete.\n");
+                }
                 break;
             case 3:
                 printf("*****************************************\n");
@@ -62,16 +65,18 @@ int main(void) {
         }
     }
 
-    // FREE ALL
-    Product *temp = NULL;
-    while(pstHead != NULL ) {
-        temp = pstHead->pstNext;
+    // FREE ALL -- NEED FIX
+    if ( pstHead ) {
+        Product *temp = NULL;
+        while(pstHead != NULL ) {
+            temp = pstHead->pstNext;
+            free(pstHead->szName);
+            free(pstHead);
+            pstHead = temp;
+        }
         free(pstHead->szName);
-        free(pstHead);
-        pstHead = temp;
+        free(temp);
     }
-    free(pstHead->szName);
-    free(temp);
     
     return OK;
 }

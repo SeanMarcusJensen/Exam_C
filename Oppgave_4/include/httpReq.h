@@ -12,6 +12,7 @@ typedef struct _MYHTTP {
     bool bIsSuccess;
     char szServer[16];
     char szContentType[16];
+    char szLastModified[32];
 } MYHTTP;
 
 MYHTTP* ProcessHttpHeader(char *pszHttp);
