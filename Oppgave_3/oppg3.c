@@ -23,16 +23,17 @@ int main(void) {
             switch (choice)
             {
             case 1:
+                // NEED VALIDATING..
                 printf("Vi trenger å lage produktet ditt. hjelp oss\n");
 
                 printf("Navn: ");
-                scanf("%s", szNameOfProduct);
+                int name = scanf("%s", szNameOfProduct);
 
                 printf("Pris: ");
-                scanf("%f", &fPrice);
+                int price = scanf("%f", &fPrice);
 
                 printf("Antall: ");
-                scanf("%i", &iQuantity);
+                int quantity = scanf("%i", &iQuantity);
 
                 insert(&pstHead, createProduct(szNameOfProduct, fPrice, iQuantity));
                 break;
@@ -46,7 +47,7 @@ int main(void) {
             case 3:
                 printf("*****************************************\n");
                 printf("Hvilket produkt vil du slette?\nNavn: ");
-                scanf("%s", szNameOfProduct);
+                name = scanf("%s", szNameOfProduct);
                 deleteAllByName(&pstHead, szNameOfProduct);
                 printf("*****************************************\n");
                 break;

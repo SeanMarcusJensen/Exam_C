@@ -68,27 +68,23 @@ int insert(Product **pstHead, Product *pstProduct) {
     return ERROR;
 }
 
-
 // Deletes the tail of list.
 int deleteLast(Product **pstHead) {
-    
-    if ( pstHead ) {
-        Product *temp = (*pstHead);
+    if(pstHead != NULL) {
+        if((*pstHead)->pstNext == NULL) {
+            (*pstHead) = NULL;
+            free(*pstHead);
+        } else {
 
-        while ( temp->pstNext != NULL ) {
-            temp = temp->pstNext;
-        }
-        
-        if ( temp->pstPrev ) {
-            temp->pstPrev->pstNext = NULL;
-        }
-        free(temp->szName);
-        free(temp);
+            Product *temp = (*pstHead);
+            Product *lastNode = temp->pstNext;
 
-        return OK;
-    } else {
-        perror("ERROR: NO HEAD TO FOLLOW.");
-        return ERROR;
+            while(temp->pstNext->pstNext != NULL)
+                temp = temp->pstNext;
+            temp->pstNext = NULL;
+            free(lastNode); 
+            free(temp);
+        }
     }
 }
 
