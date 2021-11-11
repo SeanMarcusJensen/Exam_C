@@ -2,7 +2,7 @@ INCLDIR = ./include
 CC = gcc
 CFLAGS = -O2
 CFLAGS += -I$(INCLDIR)
-NAME = oppg5c
+NAME = oppg5
 
 OBJDIR = obj
 #List all .h files here.

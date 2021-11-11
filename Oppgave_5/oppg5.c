@@ -2,85 +2,83 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #define OUTPUT_FILE "./output.md"
 
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t mutexWrite = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condWrite = PTHREAD_COND_INITIALIZER;
+pthread_cond_t condMain = PTHREAD_COND_INITIALIZER;
 
-char *getSubString(char *szMessage, int start, int end) {
-    char *subtext = malloc(sizeof(char) * end );
+int iEXIT = 1;
 
-    strncpy(subtext, &szMessage[start], end);
+typedef struct _ {
+    char szData[11];
+} Work;
 
-    return subtext;
-}
+void *writeToFile(void *szMessageToWrite) {
 
-void *writeToFile(void *szMessage) {
-    pthread_mutex_lock(&mutex);
+    Work *stWordData = (Work*) szMessageToWrite;
 
-    FILE *pOutput = fopen(OUTPUT_FILE, "a");
-    if ( pOutput ) {
-        if ( szMessage ) {
-            for ( int i = 0; i < strlen((char*) szMessage); i+=10) {
+    while( iEXIT ) {
+        pthread_mutex_lock(&mutexWrite);
+        pthread_cond_wait(&condWrite, &mutexWrite);
 
-                if ( i + 10 > strlen((char*) szMessage) ) {
-                    char* final =
-                        getSubString((char*) szMessage, 0 + i,
-                        strlen((char*) szMessage) - (i - 10));
-
-                    fprintf(pOutput, "%s", final);
-                    free(final);
-                    pthread_mutex_unlock(&mutex);
-                    break;
-                }
-
-                char* final = getSubString((char*) szMessage, 0 + i, 10);
-                fprintf(pOutput, "%s", final);
-                free(final);
+        if ( strlen(szMessageToWrite) > 0 && strncmp(stWordData->szData, "quit", 4) ) {
+            FILE *pFile = fopen(OUTPUT_FILE, "a");
+            if ( !pFile ) {
+                    perror("Could not open file!\n");
+                    return NULL;
             }
-
-            fprintf(pOutput, "\n");
+            fprintf(pFile, "%s", stWordData->szData);
+            fclose(pFile);
         }
-        fclose(pOutput);
-    } else {
-        perror("Could not open file\n");
-        pthread_mutex_unlock(&mutex);
-        return NULL;
+        
+        pthread_cond_signal(&condMain);
+        pthread_mutex_unlock(&mutexWrite);
     }
-    pthread_mutex_unlock(&mutex);
-}
 
+    pthread_exit(0);
+    return NULL;
+}
 
 int main(void) {
-    pthread_t stThread;
+    // A cry for help...
+    Work *stWorkData = malloc(sizeof(Work));
+    char chInputValid;
 
-    char msg[100];
-    int choice = 0;
-
-    printf("Welcome to \"You write in Terminal, i Write file\"\n");
-    while( choice != 3 ) {
-        
-        printf("1: Write Word\n");
-        printf("3: \033[31mEXIT\033[0m\n");
-        printf("Your choice: ");
-        scanf("%i%*c", &choice);
-
-        switch (choice)
-        {
-        case 1:
-            printf("Write a sentence for me on the next line:\n");
-            scanf("%[^\n]", msg);
-            pthread_create(&stThread, NULL, writeToFile, msg);
-            break;
-        case 3:
-            printf("Nice to play with you.\n");
-            exit(EXIT_SUCCESS);
-        default:
-            break;
-        }
-        pthread_join(stThread, NULL);
+    if ( !stWorkData ) {
+        perror("malloc fail!\n");
+        return 1;
     }
 
-    pthread_mutex_destroy(&mutex);
+    // Init Thread, Mutex & cond.
+    pthread_t stWorkThread;
+    pthread_mutex_init(&mutexWrite, NULL);
+    pthread_cond_init(&condWrite, NULL);
+    pthread_cond_init(&condMain, NULL);
+    pthread_create(&stWorkThread, NULL, writeToFile, stWorkData->szData);
+
+    // Looping thru till text == quit. then we set iExit to 1, and exit.
+    printf("Write a sentence or type \"\033[31mquit\033[0m\" to quit.\n");  
+    while( strncmp(stWorkData->szData, "quit", 4) ) {
+
+        if (fgets(stWorkData->szData, 11, stdin) && strlen(stWorkData->szData) > 0) {
+            pthread_cond_signal(&condWrite);
+            pthread_cond_wait(&condMain, &mutexWrite);
+        } else {
+            printf("Write a sentence or type \"\033[31mquit\033[0m\" to quit.\n");  
+        }
+    }
+
+    iEXIT = 0;  // FOR EXIT..
+    pthread_cond_signal(&condWrite);
+    pthread_mutex_unlock(&mutexWrite);
+    pthread_join(stWorkThread, NULL);
+    pthread_mutex_destroy(&mutexWrite);
+    pthread_cond_destroy(&condWrite);
+    pthread_cond_destroy(&condMain);
+    free(stWorkData);
+
     return 0;
 }
