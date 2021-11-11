@@ -70,22 +70,40 @@ int insert(Product **pstHead, Product *pstProduct) {
 
 // Deletes the tail of list.
 int deleteLast(Product **pstHead) {
-    if(pstHead != NULL) {
-        if((*pstHead)->pstNext == NULL) {
+    if ( pstHead != NULL ) {
+        // MEANING ITS LAST.
+        if( (*pstHead)->pstNext == NULL ) {
             (*pstHead) = NULL;
-            free(*pstHead);
+            free((*pstHead));
         } else {
-
             Product *temp = (*pstHead);
-            Product *lastNode = temp->pstNext;
-
-            while(temp->pstNext->pstNext != NULL)
+            while( temp->pstNext != NULL ) {
                 temp = temp->pstNext;
-            temp->pstNext = NULL;
-            free(lastNode); 
+            }
+            temp = NULL;
             free(temp);
         }
+
+    } else {
+        return ERROR;
     }
+
+    // if(pstHead != NULL) {
+    //     if((*pstHead)->pstNext == NULL) {
+    //         (*pstHead) = NULL;
+    //         free((*pstHead));
+    //     } else {
+
+    //         Product *temp = (*pstHead);
+
+    //         while(temp->pstNext->pstNext != NULL) {
+    //             temp = temp->pstNext;
+    //         }
+
+    //         temp->pstNext = NULL;
+    //         free(temp->pstNext);
+    //     }
+    // }
 }
 
 // Deletes All Products with name...? NEED TO FREE.
@@ -143,6 +161,7 @@ float getPriceOfAllProduct(Product **pstHead) {
             sum += temp->fPrice * temp->iQuantity;
             temp = temp->pstNext;
         }
+        free(temp);
     }
     return sum;
 }
