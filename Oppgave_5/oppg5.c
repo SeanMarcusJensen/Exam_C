@@ -10,17 +10,16 @@ pthread_mutex_t mutexWrite = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t condWrite = PTHREAD_COND_INITIALIZER;
 pthread_cond_t condMain = PTHREAD_COND_INITIALIZER;
 
-int iEXIT = 1;
-
 typedef struct _ {
     char szData[11];
+    int iQuit;
 } Work;
 
 void *writeToFile(void *szMessageToWrite) {
 
     Work *stWordData = (Work*) szMessageToWrite;
 
-    while( iEXIT ) {
+    while( stWordData->iQuit ) {
         pthread_mutex_lock(&mutexWrite);
         pthread_cond_wait(&condWrite, &mutexWrite);
 
@@ -45,6 +44,7 @@ void *writeToFile(void *szMessageToWrite) {
 int main(void) {
     // A cry for help...
     Work *stWorkData = malloc(sizeof(Work));
+    stWorkData->iQuit = 1;
     char chInputValid;
 
     if ( !stWorkData ) {
@@ -66,12 +66,10 @@ int main(void) {
         if (fgets(stWorkData->szData, 11, stdin) && strlen(stWorkData->szData) > 0) {
             pthread_cond_signal(&condWrite);
             pthread_cond_wait(&condMain, &mutexWrite);
-        } else {
-            printf("Write a sentence or type \"\033[31mquit\033[0m\" to quit.\n");  
         }
     }
 
-    iEXIT = 0;  // FOR EXIT..
+    stWorkData->iQuit = 0;  // FOR EXIT..
     pthread_cond_signal(&condWrite);
     pthread_mutex_unlock(&mutexWrite);
     pthread_join(stWorkThread, NULL);
